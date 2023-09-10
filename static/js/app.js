@@ -18,7 +18,6 @@ d3.json(url).then(function (jsonData) {
   createBubbleChart(jsonData.samples.find(sample => sample.id === initialSampleId));
 });
 
-
   // Function to update the demographic info panel
 function updateDemographicInfo(initialMetadata){
     // Find the selected test subject metadata
@@ -90,15 +89,16 @@ function optionChanged(sampleId) {
     // Fetch the JSON data
     d3.json(url).then(function (jsonData) {
       // Call the function to update demographic info
-      updateDemographicInfo(sampleId, jsonData);
+      let updatedMetadata = jsonData.metadata.find(metadata => metadata.id === +sampleId);
+      updateDemographicInfo(updatedMetadata);
   
       // Call the functions to create the charts
       let selectedSample = jsonData.samples.find(sample => sample.id === sampleId);
       createBarChart(selectedSample);
       createBubbleChart(selectedSample);
-      //updateDemographicInfo(selectedSample);
     });
   };
+
   
 
 
