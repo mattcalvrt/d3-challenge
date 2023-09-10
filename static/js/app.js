@@ -34,9 +34,21 @@ function updateDemographicInfo(initialMetadata){
   
 // Function to create the initial bar chart
 function createBarChart(initialSampleId) {
-    const sample_values = initialSampleId.sample_values.slice(0, 10);
-    const otu_ids = initialSampleId.otu_ids.slice(0, 10).map(id => `OTU ${id}`);
-    const otu_labels = initialSampleId.otu_labels;
+    const sampleData = initialSampleId.sample_values.map((value, index) => ({
+        value,
+        otu_id: initialSampleId.otu_ids[index],
+        label: initialSampleId.otu_labels[index]
+    }));
+
+    // Sort the sampleData in descending order by sample_values
+    sampleData.sort((a, b) => b.value - a.value);
+
+    // Take the top 10 values for the chart
+    const top10SampleData = sampleData.slice(0, 10);
+
+    const sample_values = top10SampleData.map(data => data.value).reverse(); // Reverse order
+    const otu_ids = top10SampleData.map(data => `OTU ${data.otu_id}`).reverse(); // Reverse order
+    const otu_labels = top10SampleData.map(data => data.label).reverse(); // Reverse order
   
     const chartData = [{
       x: sample_values,
@@ -98,9 +110,3 @@ function optionChanged(sampleId) {
       createBubbleChart(selectedSample);
     });
   };
-
-  
-
-
-
-  
